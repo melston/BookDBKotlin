@@ -1,5 +1,4 @@
 plugins {
-    id("java")
     kotlin("jvm") version "1.6.0"
 }
 
@@ -13,7 +12,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("mysql:mysql-connector-java:8.0.25") // JDBC driver for MySQL
+    implementation("mysql:mysql-connector-java:8.0.28") // JDBC driver for MySQL
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

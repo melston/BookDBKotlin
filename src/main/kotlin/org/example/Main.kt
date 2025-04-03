@@ -1,19 +1,39 @@
 package org.example
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
 import java.sql.SQLException
+import java.net.InetAddress
+
+fun getLocalIpAddress(): String {
+    return InetAddress.getLocalHost().hostAddress
+}
+
+fun isRunningLocally() : Boolean {
+    return getLocalIpAddress() == "192.168.1.175"
+}
 
 fun getConnection(): Connection? {
-    // val jdbcUrl = "jdbc:mysql://192.168.1.175:3306/bookdb"
-    val jdbcUrl = "jdbc:mysql://localhost:3306/bookdb"
+
+    val localIP = getLocalIpAddress()
+    val hostAddr = if (isRunningLocally()) "localhost" else "192.168.1.175"
+
+    val jdbcUrl = "jdbc:mysql://${hostAddr}:3306/bookdb"
+    val password = if (isRunningLocally()) "ThePigeonRiverFlooded595" else "ThePigeonRiverFlooded595!"
     val username = "mark"
-    val password = "ThePigeonRiverFlooded595"
 
     return try {
         DriverManager.getConnection(jdbcUrl, username, password)
     } catch (e: SQLException) {
         e.printStackTrace()
         null
+    }
+}
+
+data class BookRecord(val id: Int, var title: String, var publisher_id: String, var file_path: String,
+                      var is_read: Boolean, var is_favorite: Boolean) {
+    constructor(rs: ResultSet) : this(rs.getInt("id"), rs.getString("title"), rs.getString("publisher_id"),
+            rs.getString("file_path"), rs.getBoolean("is_read"), rs.getBoolean("is_favorite")) {
     }
 }
 
@@ -32,9 +52,13 @@ fun readRecords(connection: Connection) {
     val resultSet = statement.executeQuery(sql)
 
     while (resultSet.next()) {
-        val title = resultSet.getString("title")
-        val pubID = resultSet.getString("publisher_id")
-        val msg = String.format("%8s - $title", pubID)
+        val book = BookRecord(resultSet)
+        val pubID = String.format("%8s", book.publisher_id)
+        val title = String.format("%15s", book.title)
+        val msg = """
+            |${pubID} - ${title} (${book.file_path})
+            |           ${book.is_read}/${book.is_favorite}
+            """.trimIndent()
         println(msg)
     }
 }
@@ -57,7 +81,8 @@ fun deleteRecord(connection: Connection) {
 }
 
 fun main() {
-    var conn = getConnection()
+    println("Local Address = " + getLocalIpAddress())
+    val conn = getConnection()
     if (conn != null)
         readRecords(conn)
 }
