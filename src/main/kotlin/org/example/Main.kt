@@ -68,23 +68,6 @@ fun updateBookTitle(connection: Connection, book: BookRecord): Int {
     return preparedStatement.executeUpdate()
 }
 
-//fun updateRecord(connection: Connection) {
-//    val sql = "UPDATE users SET email = ? WHERE name = ?"
-//    val preparedStatement = connection.prepareStatement(sql)
-//    preparedStatement.setString(1, "new-email@example.com")
-//    preparedStatement.setString(2, "John Doe")
-//    val row = preparedStatement.executeUpdate()
-//    println("$row row(s) updated.")
-//}
-
-//fun deleteRecord(connection: Connection) {
-//    val sql = "DELETE FROM users WHERE name = ?"
-//    val preparedStatement = connection.prepareStatement(sql)
-//    preparedStatement.setString(1, "John Doe")
-//    val row = preparedStatement.executeUpdate()
-//    println("$row row(s) deleted.")
-//}
-
 fun getBooksByAuthor(connection: Connection, author: String) : List<BookRecord> {
     val sql = "SELECT * FROM books WHERE author = ? ORDER BY publisher_id"
     val preparedStatement = connection.prepareStatement(sql)
