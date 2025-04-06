@@ -1,0 +1,5 @@
+db.url.local=jdbc:mysql://localhost:3306/bookdb
+db.url.remote=jdbc:mysql://192.168.1.175:3306/bookdb
+db.user=mark
+db.password.local=ThePigeonRiverFlooded595
+db.password.remote=ThePigeonRiverFlooded595!

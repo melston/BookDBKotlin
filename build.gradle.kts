@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.6.0"
 }
 
-group = "org.example"
+group = "org.elsoft"
 version = "1.0-SNAPSHOT"
 var exposedVersion = "0.60.0"
 
@@ -16,6 +16,7 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("com.h2database:h2:2.2.224")
 }
 
 tasks.test {
