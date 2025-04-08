@@ -21,9 +21,7 @@ fun printAuthorBooks(author: String, recs: List<BookRecord>) {
 }
 
 fun main() {
-    val props = Properties()
-    props.load(File("src/main/resources/properties").inputStream())
-    val db = DBOps(props)
+    val db = DBOps()
     db.getAllBooksOrderedByPublisher()
         .filter { it.title.contains( '_' ) }
         .forEach { println("${it.publisherId} - ${it.title}") }

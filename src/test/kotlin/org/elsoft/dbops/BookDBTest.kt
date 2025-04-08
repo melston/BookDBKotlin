@@ -48,7 +48,7 @@ class BookDBTest {
         }
     }
 
-    fun setupBooks() {
+    private fun setupBooks() {
         allBooks.forEach { db.addBook(it) }
     }
 
@@ -83,7 +83,8 @@ class BookDBTest {
         Assertions.assertNotNull(retrieved)
         Assertions.assertTrue(retrieved.size == 5)
 
-        retrieved.forEachIndexed { index, b ->
+        val retrieved2 = db.getAllBooksOrderedByPublisher()
+        retrieved2.forEachIndexed { index, b ->
             Assertions.assertEquals(retrieved[index].publisherId, b.publisherId)
             Assertions.assertEquals(retrieved[index].title, b.title)
             Assertions.assertEquals(retrieved[index].author, b.author)

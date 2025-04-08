@@ -1,5 +1,6 @@
 package org.elsoft.dbops
 
+import java.io.File
 import java.net.InetAddress
 import java.sql.Connection
 import java.sql.DriverManager
@@ -12,13 +13,21 @@ data class BookRecord(val id: Int, var title: String, var publisherId: String, v
         rs.getString("file_path"), rs.getString("author"), rs.getBoolean("is_read"), rs.getBoolean("is_favorite"))
 }
 
-class DBOps(config: Properties) {
+class DBOps(config: Properties? = null) {
+
+    private val props: Properties = config ?: loadDefaultConfig()
 
     val connection: Connection = DriverManager.getConnection(
-        if (isRunningLocally()) config.getProperty("db.url.local") else config.getProperty("db.url.remote"),
-        config.getProperty("db.user"),
-        if (isRunningLocally()) config.getProperty("db.password.local") else config.getProperty("db.password.remote")
+        if (isRunningLocally()) props.getProperty("db.url.local") else props.getProperty("db.url.remote"),
+        props.getProperty("db.user"),
+        if (isRunningLocally()) props.getProperty("db.password.local") else props.getProperty("db.password.remote")
     )
+
+    private fun loadDefaultConfig(): Properties {
+        val props = Properties()
+        props.load(File("src/main/resources/properties").inputStream())
+        return props
+    }
 
     fun <T> ResultSet.map(transform: (ResultSet) -> T): List<T> {
         return generateSequence { if (next()) this else null }
