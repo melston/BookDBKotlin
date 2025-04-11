@@ -82,12 +82,39 @@ class DBOps(config: Properties? = null) {
         return preparedStatement.executeUpdate()
     }
 
+    fun getBookWithPublisherID(pubId: String): BookRecord {
+        val conn = connection
+        val sql = "SELECT * FROM books WHERE publisher_id = ?"
+        val preparedStatement = conn.prepareStatement(sql)
+        preparedStatement.setString(1, pubId)
+        val resultSet = preparedStatement.executeQuery()
+        return resultSet.map { BookRecord(it) }.get(0)
+    }
+
+    fun getBookWithTitle(title: String): BookRecord {
+        val conn = connection
+        val sql = "SELECT * FROM books WHERE title = ?"
+        val preparedStatement = conn.prepareStatement(sql)
+        preparedStatement.setString(1, title)
+        val resultSet = preparedStatement.executeQuery()
+        return resultSet.map { BookRecord(it) }.get(0)
+    }
+
+    fun getBookWithID(Id: String): BookRecord {
+        val conn = connection
+        val sql = "SELECT * FROM books WHERE id = ?"
+        val preparedStatement = conn.prepareStatement(sql)
+        preparedStatement.setString(1, Id)
+        val resultSet = preparedStatement.executeQuery()
+        return resultSet.map { BookRecord(it) }.get(0)
+    }
+
     fun getBooksByAuthor(author: String) : List<BookRecord> {
         val conn = connection
         val sql = "SELECT * FROM books WHERE author = ? ORDER BY publisher_id"
         val preparedStatement = conn.prepareStatement(sql)
         preparedStatement.setString(1, author)
-        val resultSet = preparedStatement.executeQuery(sql)
+        val resultSet = preparedStatement.executeQuery()
 
         return resultSet.map { BookRecord(it) }
     }

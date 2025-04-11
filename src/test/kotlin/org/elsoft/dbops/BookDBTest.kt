@@ -51,6 +51,28 @@ class BookDBTest {
     private fun setupBooks() {
         allBooks.forEach { db.addBook(it) }
     }
+    
+    @Test
+    fun `can retrieve a book by title`() {
+        setupBooks()
+        
+        val retrieved = db.getBookWithTitle("Test Book1")
+        Assertions.assertNotNull(retrieved)
+        Assertions.assertEquals(retrieved.title, "Test Book1")
+        Assertions.assertEquals(retrieved.publisherId, "AB-1001")
+        Assertions.assertEquals(retrieved.author, "Author X")
+    }
+
+    @Test
+    fun `can retrieve a book by publisher id`() {
+        setupBooks()
+
+        val retrieved = db.getBookWithPublisherID("AB-1004")
+        Assertions.assertNotNull(retrieved)
+        Assertions.assertEquals(retrieved.title, "Test Book4")
+        Assertions.assertEquals(retrieved.publisherId, "AB-1004")
+        Assertions.assertEquals(retrieved.author, "Author Y")
+    }
 
     @Test
     fun `can insert and retrieve book`() {
